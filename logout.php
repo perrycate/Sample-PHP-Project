@@ -1,6 +1,8 @@
 <?php
 session_start();
+// delete all session variables
 session_unset();
 
-Header('Location: index.php')
+// redirect to login page
+Header('Location: login.php')
 ?>
