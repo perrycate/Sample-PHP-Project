@@ -1,21 +1,29 @@
 <?php
-$c = new mysqli('localhost', 'root', '', 'profilebook');
+// Establish connection to database
+$database = new mysqli('localhost', 'root', '', 'profilebook');
 
-$u = $_POST['username'];
-$p = $_POST['password'];
+// get username and password from input
+$username =  $_POST['username'];
+$password = $_POST['password'];
 
-$r = $c->query("SELECT key_id FROM users WHERE username = '$u' && password = '$p';");
+// run query on database, get mysqli_result back.
+$result = $database->query("SELECT key_id FROM users WHERE username = '$username' && password = '$password';");
 
-if(!$r) {
+if(!$result) {
+    // no match returned
     $count = 0;
 }
 else {
-    $count = $r->num_rows;
+    // we got a user match!
+    $count = $result->num_rows;
 }
 
+// user password and username matches
 if($count > 0) {
     session_start();
-    $_SESSION['user_id'] = $r->fetch_row()[0];
+    // save key id for later use
+    // also, can make sure user is logged in in the future by checking user_id
+    $_SESSION['user_id'] = $result->fetch_row()[0];
     Header("Location: index.php");
 }
 else {

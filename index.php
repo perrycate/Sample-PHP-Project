@@ -1,5 +1,7 @@
 <?php
 session_start();
+
+// if user is not logged in, redirect to login screen.
 if(!isset($_SESSION['user_id'])) {
     Header('Location: login.php');
 }
@@ -14,10 +16,12 @@ if(!isset($_SESSION['user_id'])) {
         <h1>My Posts</h1>
         <table>
         <?php
-            $u = $_SESSION['user_id'];
+            // retrieve saved user id to use in queries
+            $userId = $_SESSION['user_id'];
 
-            $c = new mysqli('localhost', 'root', '', 'profilebook');
-            $r = $c->query("SELECT text, hashtag FROM posts WHERE user_id = $u");
+            // get database connection
+            $database = new mysqli('localhost', 'root', '', 'profilebook');
+            $result = $database->query("SELECT text, hashtag FROM posts WHERE user_id = $u");
 
             while($p = $r->fetch_row()) {
                 echo "<tr><td>" . $p[0] ."</td><td>" . $p[1] . "</td></tr>";
